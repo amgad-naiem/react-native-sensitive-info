@@ -120,6 +120,8 @@ We unified our library's methods to bring more efficiency and simplify the usabi
 
 `deleteItem(key, options)`: It will delete value from given key
 
+`clear(options)`: It will delete all values in Shared Preferences & Keychain
+
 `getAllItems(options)`: Will retrieve all keys and values from Shared Preferences & Keychain
 
 "Options" is a new parameter (optional) that you can pass to our methods. But what does it do? Now, you can select which keychain's service (iOS) and shared preferences's name (android) you can use. To do so:
