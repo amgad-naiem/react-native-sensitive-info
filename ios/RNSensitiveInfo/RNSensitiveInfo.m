@@ -262,6 +262,32 @@ RCT_EXPORT_METHOD(deleteItem:(NSString *)key options:(NSDictionary *)options res
     resolve(nil);
 }
 
+RCT_EXPORT_METHOD(clear:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
+
+    NSString * keychainService = [RCTConvert NSString:options[@"keychainService"]];
+    if (keychainService == NULL) {
+        keychainService = @"app";
+    }
+
+    // Create dictionary of search parameters
+    NSDictionary* query = [NSDictionary dictionaryWithObjectsAndKeys:
+                           (__bridge id)(kSecClassGenericPassword), kSecClass,
+                           keychainService, kSecAttrService,
+                           kCFBooleanTrue, kSecReturnAttributes,
+                           kCFBooleanTrue, kSecReturnData, nil];
+
+    // Remove any old values from the keychain
+    OSStatus osStatus = SecItemDelete((__bridge CFDictionaryRef) query);
+
+    if (osStatus != noErr && osStatus != errSecItemNotFound) {
+        NSError *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:osStatus userInfo:nil];
+        reject([NSString stringWithFormat:@"%ld",(long)error.code], messageForError(error), nil);
+        return;
+    }
+
+    resolve(nil)
+}
+
 RCT_EXPORT_METHOD(isSensorAvailable:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     LAContext *context = [[LAContext alloc] init];

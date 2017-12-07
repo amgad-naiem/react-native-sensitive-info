@@ -137,6 +137,17 @@ public class RNSensitiveInfoModule extends ReactContextBaseJavaModule {
         pm.resolve(null);
     }
 
+    @ReactMethod
+    public void clear(ReadableMap options, Promise pm) {
+
+        String name = sharedPreferences(options);
+
+        SharedPreferences.Editor editor = prefs(name).edit();
+
+        editor.clear().apply();
+
+        pm.resolve(null);
+    }
 
     @ReactMethod
     public void getAllItems(ReadableMap options, Promise pm) {
